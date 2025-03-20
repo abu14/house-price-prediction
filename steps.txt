@@ -1,0 +1,11 @@
+pip install kaggle
+kaggle competitions list
+kaggle competitions download -c house-prices-advanced-regression-techniques
+
+
+
+import zipfile
+
+# Example of how to extract a zip file in Python
+with zipfile.ZipFile('house-prices-advanced-regression-techniques.zip', 'r') as zip_ref:
+    zip_ref.extractall('destination_directory')
