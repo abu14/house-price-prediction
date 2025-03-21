@@ -2,6 +2,7 @@ import pandas as pd
 import subprocess
 import zipfile
 import os 
+import io
 import sqlite3
 
 ## create a db name
@@ -44,16 +45,14 @@ except subprocess.CalledProcessError as e:
 conn = sqlite3.connect(database_name)
 cursor = conn.cursor()
 
-# Open the ZIP file
+# Open the zippd file
 zip_file = f"{competition_name}.zip"
 with zipfile.ZipFile(zip_file, 'r') as zip_ref:
-    # Get a list of files in the ZIP
     zip_files = zip_ref.namelist()
     
-    # Process each CSV file directly from the ZIP
     for file_name in zip_files:
-        if file_name.endswith('.csv'):  # Only process CSV files
-            table_name = file_name.replace('.csv', '')  # Use file name as table name
+        if file_name.endswith('.csv'):  
+            table_name = file_name.replace('.csv', '')  
             print(f"Loading {file_name} into table '{table_name}'...")
             
             try:
