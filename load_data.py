@@ -6,7 +6,7 @@ import io
 import sqlite3
 
 ## create a db name
-database_name = 'house_prices.db' 
+database_name = 'db/house_prices.db' 
 
 #Configuration to kaggle
 competition_name = 'house-prices-advanced-regression-techniques'
