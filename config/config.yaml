@@ -1,0 +1,79 @@
+# config/config.yaml
+paths:
+  database: "data/house_prices.db"  # Database location
+  model: "models/xgb_model.pkl"     # Where to save trained model
+  predictions_table: "predictions"  # Table name for storing predictions
+
+data:
+  train_table: "train"              # Name of training table in DB
+  test_table: "test"                # Name of test table in DB
+  id_col: "Id"                      # Identifier column name
+  target_col: "SalePrice"           # Target variable name
+  drop_missing_threshold: 0.35      # Drop cols with >35% missing values
+  test_size: 0.2                    # Validation split size
+  random_state: 42                  # Reproducibility seed
+
+features:
+  # Columns with binary categorical data
+  binary_cols:
+    - "Street"
+    - "CentralAir"
+    - "Utilities"
+  
+  # Low cardinality categorical cols for one-hot encoding
+  low_cardinality_cols:
+    - "HouseStyle"
+    - "RoofMatl"
+    - "Condition1"
+    - "Condition2"
+    - "Functional"
+    - "SaleCondition"
+    - "GarageType"
+    - "SaleType"
+    - "Heating"
+    - "Foundation"
+    - "RoofStyle"
+    - "BldgType"
+    - "LotConfig"
+    - "MSZoning"
+    - "Electrical"
+    - "LandContour"
+    - "LotShape"
+
+  # High cardinality cols for target encoding
+  high_cardinality_cols:
+    - "Neighborhood"
+    - "Exterior2nd"
+    - "Exterior1st"
+
+  # Ordinal feature mappings (category -> numeric value)
+  ordinal_mappings:
+    ExterQual: {"Ex": 4, "Gd": 3, "TA": 2, "Fa": 1, "Po": 0, "missing": 2}
+    BsmtQual: {"Ex": 4, "Gd": 3, "TA": 2, "Fa": 1, "Po": 0, "missing": 2}
+    KitchenQual: {"Ex": 4, "Gd": 3, "TA": 2, "Fa": 1, "Po": 0, "missing": 2}
+    HeatingQC: {"Ex": 4, "Gd": 3, "TA": 2, "Fa": 1, "Po": 0, "missing": 2}
+    GarageQual: {"Ex": 4, "Gd": 3, "TA": 2, "Fa": 1, "Po": 0, "missing": 2}
+    GarageCond: {"Ex": 4, "Gd": 3, "TA": 2, "Fa": 1, "Po": 0, "missing": 2}
+    ExterCond: {"Ex": 4, "Gd": 3, "TA": 2, "Fa": 1, "Po": 0, "missing": 2}
+    BsmtCond: {"Ex": 4, "Gd": 3, "TA": 2, "Fa": 1, "Po": 0, "missing": 2}
+    BsmtExposure: {"Gd": 3, "Av": 2, "Mn": 1, "No": 0, "missing": 0}
+    LandSlope: {"Gtl": 0, "Mod": 1, "Sev": 2, "missing": 0}
+    PavedDrive: {"Y": 2, "P": 1, "N": 0, "missing": 0}
+    BsmtFinType1: {"GLQ": 5, "ALQ": 4, "BLQ": 3, "Rec": 2, "LwQ": 1, "Unf": 0, "missing": 0}
+    BsmtFinType2: {"GLQ": 5, "ALQ": 4, "BLQ": 3, "Rec": 2, "LwQ": 1, "Unf": 0, "missing": 0}
+    GarageFinish: {"Fin": 2, "RFn": 1, "Unf": 0, "missing": 0}
+
+model:
+  hyperparameters:
+    learning_rate: [0.01, 0.03, 0.05, 0.10]
+    subsample: [0.7, 0.8, 0.9, 1.0]
+    n_estimators: [100, 300, 500, 1000]
+    max_depth: [3, 5, 7, 9]
+    min_child_weight: [1, 3, 5, 7]
+    gamma: [0.0, 0.1, 0.2, 0.3]
+    colsample_bytree: [0.3, 0.5, 0.7]
+    reg_alpha: [0, 0.1, 0.5, 1]
+    reg_lambda: [0.85, 1, 1.5, 2]
+  early_stopping_rounds: 10
+  scoring: "neg_root_mean_squared_error"
+  cv_folds: 5
